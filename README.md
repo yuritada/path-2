@@ -1,9 +1,7 @@
 # path-2
 
 ## メンバー
-## YuriTada
-
-
+- YuriTada
 - sekiguchi
 
 
