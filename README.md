@@ -2,6 +2,8 @@
 
 ## メンバー
 
+- sekiguchi
+
 
 ### supecial thanks
 
