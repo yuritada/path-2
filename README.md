@@ -2,6 +2,9 @@
 
 ## メンバー
 ## Ukyo Okajima
+- YuriTada
+- sekiguchi
+
 
 ### supecial thanks
 
