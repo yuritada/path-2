@@ -1,7 +1,7 @@
 # path-2
 
 ## メンバー
-## Ukyo Okajima
+- Ukyo Okajima
 - YuriTada
 - sekiguchi
 
