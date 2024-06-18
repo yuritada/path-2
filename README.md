@@ -4,6 +4,7 @@
 - Ukyo Okajima
 - YuriTada
 - sekiguchi
+- nambo
 
 
 ### supecial thanks
