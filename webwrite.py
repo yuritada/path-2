@@ -18,14 +18,19 @@ def load_objects_from_csv(file_path):
     return df[0].tolist()
 
 # 例として、"objects.csv"という名前のCSVファイルからデータを読み込みます
-csv_file_path = "/Users/ukyookajima/path-2-2/choice.csv"  # ここに実際のファイルパスを指定してください
+csv_file_path = "choice.csv"  # ここに実際のファイルパスを指定してください
 objects = load_objects_from_csv(csv_file_path)
 
+def reset_game():
+    st.session_state.object = random.choice(objects)
+    st.session_state.question_list = []
+    st.session_state.answer_list = []
+
 def 一ページ目表示():
-    st.title('AI質問応答システム')
+    st.title('生成AIアキネーター')
     if st.button('始める'):
+        reset_game()
         st.session_state.page = 'setup'
-        st.session_state.object = random.choice(objects)
 
 def セットアップ():
     st.title('設定')
@@ -72,7 +77,7 @@ def セットアップ():
                 answer = "わかりません"
             st.session_state.question_list.append(question)
             st.session_state.answer_list.append(answer)
-    
+        
     with col2:
         if st.button('答えを見る'):
             st.write(f"選ばれた物体: {selected_object}")
@@ -81,6 +86,17 @@ def セットアップ():
     for i in reversed(range(len(st.session_state.question_list))):
         st.write(f"質問{i+1}: {st.session_state.question_list[i]}")
         st.write(f"回答{i+1}: {st.session_state.answer_list[i]}")
+    
+    # If the answer is "It's correct.", show the "タイトルに戻る" and "もう一度" buttons
+    if len(st.session_state.answer_list) > 0 and st.session_state.answer_list[-1] == "It's correct.":
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button('タイトルに戻る'):
+                st.session_state.page = 'home'
+        with col2:
+            if st.button('もう一度'):
+                reset_game()
+                st.session_state.page = 'setup'
 
 # 初期ページを設定
 if 'page' not in st.session_state:
