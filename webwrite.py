@@ -4,8 +4,6 @@ import random
 import pandas as pd
 from pprint import pprint
 
-question_list = []
-answer_list = []
 model_id = "anthropic.claude-3-haiku-20240307-v1:0"
 bedrock_client = boto3.client(service_name='bedrock-runtime', region_name='us-west-2')
 
@@ -33,12 +31,8 @@ def セットアップ():
     st.title('設定')
     st.write('質問は何ですか？')
     selected_object = st.session_state.object
-    st.write(f"選ばれた物体: {selected_object}")
     # テキストボックスを作成
     question = st.text_input('Yes か No で答えられる質問を書いてしてください', placeholder='質問を入力してください')
-    # 入力内容を表示
-    st.write('質問:', question)
-    print(question_list)
     if st.button('質問を送信'):
         # AIに送信するメッセージを作成
         message = {
@@ -65,28 +59,29 @@ def セットアップ():
         completion_text = output_message['content'][0]['text'].lower()
         # 応答に選ばれた物体が含まれているかチェックして対応するメッセージを表示
         if selected_object in completion_text or selected_object in question.lower():
-            st.write('回答:', "It's correct.")
+            answer = "It's correct."
         elif 'yes' in completion_text or 'はい' in completion_text:
-            st.write('回答:', "はい")
+            answer = "はい"
         elif 'no' in completion_text or 'いいえ' in completion_text:
-            st.write('回答:', "いいえ")
+            answer = "いいえ"
         else:
-            st.write('回答:', "わかりません")
-        question_list.append(question)
-        answer_list.append(completion_text)
-        for i in range(len(question_list)):
-            st.write(f"質問{i+1}: {question_list[i]}")
-            st.write(f"回答{i+1}: {answer_list[i]}")
+            answer = "わかりません"
+        st.session_state.question_list.append(question)
+        st.session_state.answer_list.append(answer)
+
+    # 質問と回答を表示（新しいものが上部に表示されるように逆順で表示）
+    for i in reversed(range(len(st.session_state.question_list))):
+        st.write(f"質問{i+1}: {st.session_state.question_list[i]}")
+        st.write(f"回答{i+1}: {st.session_state.answer_list[i]}")
 
 # 初期ページを設定
 if 'page' not in st.session_state:
     st.session_state.page = 'home'
+    st.session_state.question_list = []
+    st.session_state.answer_list = []
 
 # ページの切り替え
 if st.session_state.page == 'home':
     一ページ目表示()
 elif st.session_state.page == 'setup':
     セットアップ()
-
-
-

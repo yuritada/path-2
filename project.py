@@ -7,7 +7,7 @@
 # s3 = boto3.resource('s3')
 
 import boto3
-import wedwrite as wr
+import webwrite as wr
 from pprint import pprint
 
 def QandA ():
