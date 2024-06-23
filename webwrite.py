@@ -168,7 +168,7 @@ def henkan():
     global completion_text
     message = {
             "role": "user",
-            "content": [{"text": f"{st.session_state.object}"+"から連想される言葉を英語で3つ返してください。"}]
+            "content": [{"text": f"{st.session_state.object}"+"から連想される言葉を英語で1つ返してください。"}]
         }
     messages = [message]
     # 推論に使用するパラメータ
