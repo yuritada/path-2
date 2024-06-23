@@ -1,8 +1,7 @@
 import boto3
 from pprint import pprint
 
-model_id = "anthropic.claude-3-haiku-20240307-v1:0"
-system_prompt = "あなたは多くのデータにアクセス可能な経済学者です。"
+model_id = "stability.stable-diffusion-xl-v1"
 prompt = "高インフレが国のGDPに与える影響について30文字で述べなさい。"
 
 bedrock_client = boto3.client(service_name='bedrock-runtime', region_name='us-west-2')
