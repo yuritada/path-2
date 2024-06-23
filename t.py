@@ -6,6 +6,13 @@ import json
 import base64
 from datetime import datetime
 
+import os
+#写真を削除
+def remove_image():
+    for file in os.listdir():#ファイル名を取得
+        if file.endswith(".png"):
+            os.remove(file)#ファイルを削除
+
 # AWS Bedrockクライアントの設定
 model_id = "anthropic.claude-3-haiku-20240307-v1:0"
 bedrock_client = boto3.client(service_name='bedrock-runtime', region_name='us-west-2')
@@ -28,6 +35,7 @@ def reset_game():
     selected_elements.append(st.session_state.object)
     st.session_state.question_list = []
     st.session_state.answer_list = []
+    remove_image()
 
 # 初めのページの表示
 def show_start_page():
