@@ -1,3 +1,4 @@
 node_modules
 .venvpath2
 .aws/credentials
+*.png

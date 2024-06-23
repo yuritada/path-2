@@ -6,9 +6,9 @@ import json
 import base64
 from datetime import datetime
 
-# # AWS Bedrockクライアントの設定
-# model_id = "anthropic.claude-3-haiku-20240307-v1:0"
-# bedrock_client = boto3.client(service_name='bedrock-runtime', region_name='us-west-2')
+# AWS Bedrockクライアントの設定
+model_id = "anthropic.claude-3-haiku-20240307-v1:0"
+bedrock_client = boto3.client(service_name='bedrock-runtime', region_name='us-west-2')
 
 st.set_page_config(layout="wide")
 
@@ -60,38 +60,38 @@ def show_setup_page():
                 st.write(f"選ばれた物体: {selected_object}")
     
     if submit_button:
-        # # AIに送信するメッセージを作成
-        # message = {
-        #     "role": "user",
-        #     "content": [{"text": f"物体: {selected_object}\n質問: {question}\nこの質問に対して「はい」か「いいえ」で答えてください。"}]
-        # }
-        # messages = [message]
-        # # 推論に使用するパラメータ
-        # temperature = 0.5
-        # top_k = 200
-        # # ベースの推論パラメータ
-        # inference_config = {"temperature": temperature}
-        # # 追加の推論パラメータ
-        # additional_model_fields = {"top_k": top_k}
-        # # メッセージの送信
-        # response = bedrock_client.converse(
-        #     modelId=model_id,
-        #     messages=messages,
-        #     inferenceConfig=inference_config,
-        #     additionalModelRequestFields=additional_model_fields
-        # )
-        # # 応答の取得
-        # output_message = response['output']['message']
-        # completion_text = output_message['content'][0]['text'].lower()
+        # AIに送信するメッセージを作成
+        message = {
+            "role": "user",
+            "content": [{"text": f"物体: {selected_object}\n質問: {question}\nこの質問に対して「はい」か「いいえ」で答えてください。"}]
+        }
+        messages = [message]
+        # 推論に使用するパラメータ
+        temperature = 0.5
+        top_k = 200
+        # ベースの推論パラメータ
+        inference_config = {"temperature": temperature}
+        # 追加の推論パラメータ
+        additional_model_fields = {"top_k": top_k}
+        # メッセージの送信
+        response = bedrock_client.converse(
+            modelId=model_id,
+            messages=messages,
+            inferenceConfig=inference_config,
+            additionalModelRequestFields=additional_model_fields
+        )
+        # 応答の取得
+        output_message = response['output']['message']
+        completion_text = output_message['content'][0]['text'].lower()
         # 応答に選ばれた物体が含まれているかチェックし、対応するメッセージを表示
-        # if selected_object in completion_text or selected_object in question.lower():
-        #     answer = "It's correct."
-        # elif 'yes' in completion_text or 'はい' in completion_text:
-        #     answer = "はい"
-        # elif 'no' in completion_text or 'いいえ' in completion_text:
-        #     answer = "いいえ"
-        # else:
-        #     answer = "わかりません"
+        if selected_object in completion_text or selected_object in question.lower():
+            answer = "It's correct."
+        elif 'yes' in completion_text or 'はい' in completion_text:
+            answer = "はい"
+        elif 'no' in completion_text or 'いいえ' in completion_text:
+            answer = "いいえ"
+        else:
+            answer = "わかりません"
         st.session_state.question_list.append(question)
         st.session_state.answer_list.append(answer)
     
@@ -154,7 +154,7 @@ def create_and_save_image():
     binary_data = base64.b64decode(base64_data)
 
     # 画像を保存
-    dt_str = str(datetime.now())
+    dt_str = str(datetime.now())#dt_strt
     file_path = f"{dt_str}.png"
     with open(file_path, "wb") as f:
         f.write(binary_data)
