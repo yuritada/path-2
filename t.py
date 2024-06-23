@@ -24,6 +24,8 @@ objects = load_objects_from_csv(csv_file_path)
 # ゲームのリセット関数
 def reset_game():
     st.session_state.object = random.choice(objects)
+    selected_elements = random.sample(objects, 2)
+    selected_elements.append(st.session_state.object)
     st.session_state.question_list = []
     st.session_state.answer_list = []
 
@@ -38,7 +40,7 @@ def show_start_page():
 def show_setup_page():
     st.title('生成AIアキネータースタート！！')
     selected_object = st.session_state.object
-
+    
     st.write('')  # スペースを作成してボタンと質問フォームの間を区切る
 
     if st.button('生成された画像を見る'):
@@ -115,10 +117,11 @@ def show_setup_page():
 
 # 画像を生成して保存する関数
 def create_and_save_image():
+    global completion_text
+    henkan()
     runtime_client = boto3.client(service_name='bedrock-runtime', region_name='us-west-2')
-
-    # プロンプトとスタイルの設定
-    prompt_data = "猫"
+    prompt_data = f"{completion_text}"
+    print(prompt_data)
     style_data = "cinematic"  # 他のスタイル: "3d-model", "analog-film", "cinematic", etc.
     # 乱数シードの設定
     seed = random.randint(0, 4294967295)
@@ -161,6 +164,31 @@ def create_and_save_image():
     
     # 生成した画像ファイルのパスをセッションに保存
     st.session_state.image_file_path = file_path
+
+def henkan():
+    global completion_text
+    message = {
+            "role": "user",
+            "content": [{"text": f"{st.session_state.object}"+"から連想される言葉を英語で3つ返してください。"}]
+        }
+    messages = [message]
+    # 推論に使用するパラメータ
+    temperature = 0.5
+    top_k = 200
+    # ベースの推論パラメータ
+    inference_config = {"temperature": temperature}
+    # 追加の推論パラメータ
+    additional_model_fields = {"top_k": top_k}
+    # メッセージの送信
+    response = bedrock_client.converse(
+        modelId=model_id,
+        messages=messages,
+        inferenceConfig=inference_config,
+        additionalModelRequestFields=additional_model_fields
+    )
+        # 応答の取得
+    output_message = response['output']['message']
+    completion_text = output_message['content'][0]['text'].lower()
 
 # セッションの初期化
 if 'page' not in st.session_state:
